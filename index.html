@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FireSys — Command Login</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .login-credential-hint {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: 12px;
+      letter-spacing: 0.1em;
+    }
+    .loading-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-fire), var(--accent-amber));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+      z-index: 9998;
+    }
+    .loading-bar.active { transform: scaleX(1); }
+    .btn-fire:disabled { opacity: 0.6; cursor: not-allowed; }
+  </style>
+</head>
+<body class="login-body">
+  <div class="login-bg"></div>
+  <div class="login-grid"></div>
+  <div class="loading-bar" id="loadingBar"></div>
+
+  <div class="login-card animate-in">
+    <div class="login-header">
+      <span class="login-flame">🔥</span>
+      <span class="login-title">FireSys</span>
+      <span class="login-subtitle">Emergency Dispatch Command</span>
+    </div>
+
+    <div id="loginAlert" class="login-alert">
+      ⚠ Invalid credentials. Try again.
+    </div>
+
+    <div class="login-form">
+      <div class="form-group">
+        <label class="form-label">Command ID</label>
+        <input type="text" id="username" class="form-input" placeholder="Enter username" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Security Key</label>
+        <input type="password" id="password" class="form-input" placeholder="Enter password" onkeydown="if(event.key==='Enter') login()">
+      </div>
+      <button class="btn btn-fire" id="loginBtn" onclick="login()">
+        ▶ Authenticate
+      </button>
+    </div>
+
+    <div class="login-credential-hint">Use any username & password to enter</div>
+
+    <div class="login-footer">
+      <span class="version">v2.4.1 — BUILD 2026</span>
+      <span class="secure">🔒 SECURE CONNECTION</span>
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      const alert = document.getElementById('loginAlert');
+      const btn = document.getElementById('loginBtn');
+      const bar = document.getElementById('loadingBar');
+
+      if (!user || !pass) {
+        alert.classList.add('show');
+        alert.textContent = '⚠ Enter Command ID and Security Key.';
+        setTimeout(() => alert.classList.remove('show'), 3000);
+        return;
+      }
+
+      alert.classList.remove('show');
+      btn.disabled = true;
+      btn.textContent = 'Authenticating...';
+      bar.classList.add('active');
+
+      setTimeout(() => {
+        bar.classList.remove('active');
+        window.location.href = 'dashboard.html';
+      }, 800);
+    }
+  </script>
+</body>
+</html>
